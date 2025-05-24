@@ -198,7 +198,8 @@
 
 body {
   margin: 0;
-  font-family: var(--bs-body-font-family);
+  /* font-family: var(--bs-body-font-family); */
+  font-family: corisande;
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
@@ -5933,7 +5934,7 @@ fieldset:disabled .btn {
 
 .alert-dismissible .btn-close {
   position: absolute;
-  top: 0;
+  top: 0;Dashboard_header
   right: 0;
   z-index: 2;
   padding: 1.25rem 1rem;
@@ -28252,6 +28253,10 @@ pre[class*=language-] {
   .ps {
     overflow: auto !important;
   }
+}
+
+#Dashboard_header{
+  font-size: 30px;
 }
 
 /*# sourceMappingURL=dashboard-free.css.map */
