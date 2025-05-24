@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <title>
+    Kaputei Dashboard - Product Management
+  </title>
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/nucleo-icons@1.0.0/css/nucleo-icons.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
+  <style>
+    .product-card {
+      transition: all 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    .category-badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+    }
+    .stock-low {
+      color: #f5365c;
+    }
+    .stock-medium {
+      color: #fb6340;
+    }
+    .stock-high {
+      color: #2dce89;
+    }
+  </style>
+</head>
+
+<body class="g-sidenav-show bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0" href="#" target="_blank">
+        <span class="ms-1 font-weight-bold text-white">Kaputei Dashboard</span>
+      </a>
+    </div>
+    <hr class="horizontal light mt-0 mb-2">
+    <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="../pages/dashboard.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">Dashboard</i>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white active bg-gradient-primary" href="./product-management.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">Inventory</i>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="../pages/orders.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">Orders</i>
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="../pages/reports.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">Reports</i>
+            </div>
+          </a>
+        </li>
+           <li class="nav-item">
+          <a class="nav-link text-white" href="../pages/sign-in.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">Log out</i>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <h6 class="font-weight-bolder mb-0">Product Management</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Search products...">
+            </div>
+          </div>
+          <ul class="navbar-nav justify-content-end">
+            <li class="nav-item d-flex align-items-center">
+              <a href="#" class="nav-link text-body font-weight-bold px-0">
+                <i class="fa fa-user me-sm-1"></i>
+                <span class="d-sm-inline d-none">Admin</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6>Product Categories</h6>
+                <button class="btn btn-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#addCategoryModal">+ Add Category</button>
+              </div>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Products</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Tomato Sauce -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Tomato Sauce</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Shop our delicious tomato sauces</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">24 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sundried Tomatoes -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Sundried Tomatoes</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Try our premium sundried tomatoes</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">12 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Sauces -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Sauces</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Explore our sauce collection</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">18 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Salsa Kachumbari -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Salsa Kachumbari</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Discover our fresh salsas</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">8 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Pickles -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Pickles</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Try our crunchy pickles</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">15 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Pestos -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Pestos</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Explore our pesto varieties</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">10 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Mayonnaise -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Mayonnaise</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Try our creamy mayonnaise</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">7 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Jams -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Jams</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Sweeten your day with our jams</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">14 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Honey -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Honey</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Pure natural honey from our farm</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">9 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Dressings -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Dressings</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Enhance your salads</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">11 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    
+                    <!-- Chutney -->
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Chutney</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">Try our flavorful chutneys</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-secondary">6 products</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit category">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6>All Products</h6>
+                <div>
+                  <button class="btn btn-primary btn-sm mb-0 me-2" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add Product</button>
+                  <button class="btn btn-outline-secondary btn-sm mb-0">Export</button>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" aria-label="Filter by category">
+                    <option selected>All Categories</option>
+                    <option>Tomato Sauce</option>
+                    <option>Sundried Tomatoes</option>
+                    <option>Sauces</option>
+                    <option>Salsa Kachumbari</option>
+                    <option>Pickles</option>
+                    <option>Pestos</option>
+                    <option>Mayonnaise</option>
+                    <option>Jams</option>
+                    <option>Honey</option>
+                    <option>Dressings</option>
+                    <option>Chutney</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <select class="form-select form-select-sm" aria-label="Filter by status">
+                    <option selected>All Statuses</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                    <option>Low Stock</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Stock</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="../assets/img/products/tomato-sauce.jpg" class="avatar avatar-sm me-3" alt="tomato sauce">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Classic Tomato Sauce</h6>
+                            <p class="text-xs text-secondary mb-0">500ml bottle</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">Tomato Sauce</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">KSh 250</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold stock-low">12 units</span>
+                      </td>
+                      <td>
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <button class="btn btn-link text-secondary mb-0">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link text-danger mb-0">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div>
+                            <img src="../assets/img/products/sundried-tomatoes.jpg" class="avatar avatar-sm me-3" alt="sundried tomatoes">
+                          </div>
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">Premium Sundried Tomatoes</h6>
+                            <p class="text-xs text-secondary mb-0">200g jar</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">Sundried Tomatoes</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">KSh 450</span>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold stock-high">78 units</span>
+                      </td>
+                      <td>
+                        <span class="badge badge-sm bg-gradient-success">Active</span>
+                      </td>
+                      <td class="align-middle">
+                        <button class="btn btn-link text-secondary mb-0">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link text-danger mb-0">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <!-- Additional product rows would go here -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="px-3 pt-4">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-end">
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="productName" class="form-control-label">Product Name</label>
+                    <input class="form-control" type="text" id="productName">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="productCategory" class="form-control-label">Category</label>
+                    <select class="form-control" id="productCategory">
+                      <option>Tomato Sauce</option>
+                      <option>Sundried Tomatoes</option>
+                      <option>Sauces</option>
+                      <option>Salsa Kachumbari</option>
+                      <option>Pickles</option>
+                      <option>Pestos</option>
+                      <option>Mayonnaise</option>
+                      <option>Jams</option>
+                      <option>Honey</option>
+                      <option>Dressings</option>
+                      <option>Chutney</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="productPrice" class="form-control-label">Price (KSh)</label>
+                    <input class="form-control" type="number" id="productPrice">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="productStock" class="form-control-label">Stock Quantity</label>
+                    <input class="form-control" type="number" id="productStock">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="productSKU" class="form-control-label">SKU</label>
+                    <input class="form-control" type="text" id="productSKU">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="productDescription" class="form-control-label">Description</label>
+                <textarea class="form-control" id="productDescription" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="productImage" class="form-control-label">Product Image</label>
+                <input class="form-control" type="file" id="productImage">
+              </div>
+              <div class="form-check form-switch ps-0">
+                <input class="form-check-input ms-auto" type="checkbox" id="productStatus" checked>
+                <label class="form-check-label text-body ms-3" for="productStatus">Active Product</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save Product</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="categoryName" class="form-control-label">Category Name</label>
+                <input class="form-control" type="text" id="categoryName">
+              </div>
+              <div class="form-group">
+                <label for="categoryDescription" class="form-control-label">Description</label>
+                <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+              </div>
+              <div class="form-check form-switch ps-0">
+                <input class="form-check-input ms-auto" type="checkbox" id="categoryStatus" checked>
+                <label class="form-check-label text-body ms-3" for="categoryStatus">Active Category</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save Category</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+    <script>
+      var win = navigator.platform.indexOf('Win') > -1;
+      if (win && document.querySelector('#sidenav-scrollbar')) {
+        var options = {
+          damping: '0.5'
+        }
+        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+      }
+    </script>
+    <!-- Github buttons -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/argon-dashboard.min.js?v=2.1.0"></script>
+  </main>
+</body>
+
+</html>
